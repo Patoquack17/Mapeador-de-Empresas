@@ -1,4 +1,14 @@
-Funcionamento passo a passo
+🧠 O que ele faz no geral
+
+Quando você ativa com /mapear, ele:
+
+Analisa a lista de empresas da imobiliária
+Procura empresas que estão à venda (“Sim”)
+Abre automaticamente a info dessas empresas
+Salva os dados (ID, nome, dono, valor, localização)
+Evita repetir empresas já vistas
+Vai passando páginas sozinho até terminar tudo
+⚙️ Funcionamento passo a passo
 Você ativa o script
 /mapear
 Aí você abre a lista de empresas (tecla Y no servidor)
@@ -16,7 +26,7 @@ Nome
 Dono
 Valor
 Localização
-Mostra no chat
+Mostra no chat bonitinho
 Salva em:
 empresa_novas.txt (dados completos)
 empresa_vistos.txt (IDs já vistos)
