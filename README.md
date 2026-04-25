@@ -4,7 +4,7 @@
 Vantagem: Depois da primeira scaneiada, ele não visualiza novamente as msm empresas\casas e sim as novas q forem liberadas evitando dor de cabeça e tempo na fila da imobiliaria. 
 
 
-Quando você ativa com /mapear, ele:
+Quando você ativa com /empresas e /casas, ele:
 
 Analisa a lista de empresas da imobiliária
 Procura empresas que estão à venda (“Sim”)
@@ -14,7 +14,7 @@ Evita repetir empresas já vistas
 Vai passando páginas sozinho até terminar tudo
 ⚙️ Funcionamento passo a passo
 Você ativa o script
-/mapear
+/empresas  /casas
 Aí você abre a lista de empresas (tecla Y no servidor)
 Ele lê a lista
 Identifica quais estão “Sim” (à venda)
