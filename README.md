@@ -1,7 +1,7 @@
 🧠 O que ele faz no geral
 
 
-Vantagem: Depois da primeira scaneiada, ele não visualiza novamente as msm empresas e sim as novas q forem liberadas evitando dor de cabeça e tempo na fila da imobiliaria. 
+Vantagem: Depois da primeira scaneiada, ele não visualiza novamente as msm empresas\casas e sim as novas q forem liberadas evitando dor de cabeça e tempo na fila da imobiliaria. 
 
 
 Quando você ativa com /mapear, ele:
