@@ -1,11 +1,11 @@
 -- ============================================================
--- empresa_mapper.lua  v1.0
+-- empresa_mapper.lua  v6.1
 -- Loader: MoonLoader
 -- ============================================================
 
 script_name("empresa_mapper")
-script_author("QuackQuack")
-script_version("1.0")
+script_author("mapper")
+script_version("6.1")
 
 require 'lib.moonloader'
 local sampev = require 'lib.samp.events'
@@ -16,9 +16,9 @@ local ARQUIVO_LOG    = getWorkingDirectory() .. "\\empresa_novas.txt"
 local ARQUIVO_VISTOS = getWorkingDirectory() .. "\\empresa_vistos.txt"
 
 -- ── Estado ─────────────────────────────────────────────────
-local ativo       = false
-local ids_vistos  = {}
-local empresas    = {}
+local ativo      = false
+local ids_vistos = {}
+local empresas   = {}
 
 -- ── Persistência ───────────────────────────────────────────
 
@@ -65,7 +65,7 @@ end
 -- ── Helpers ────────────────────────────────────────────────
 
 local function log(msg)
-    sampAddChatMessage("{FF4444}[Mapper] {FFFFFF}" .. tostring(msg), -1)
+    sampAddChatMessage("{FF4444}[Empresas] {FFFFFF}" .. tostring(msg), -1)
 end
 
 local function log_empresa(dados)
@@ -141,7 +141,6 @@ sampev.onShowDialog = function(id, tipo, titulo, btn1, btn2, conteudo)
         local total_linhas = 0
         for _ in conteudo:gmatch("[^\n]+") do total_linhas = total_linhas + 1 end
 
-        -- Pega primeira empresa "Sim" não visitada desta página
         local alvo = nil
         for _, l in ipairs(linhas) do
             if l.sim and not ids_vistos[l.id] then
@@ -151,21 +150,18 @@ sampev.onShowDialog = function(id, tipo, titulo, btn1, btn2, conteudo)
         end
 
         if alvo then
-            -- Abre info da empresa, salva e para — usuário decide o resto
             lua_thread.create(function()
                 wait(DELAY_ACAO)
                 sampSendDialogResponse(id, 1, alvo.indice, alvo.id)
             end)
 
         elseif proxima then
-            -- Nenhuma nova nessa página, vai para próxima automaticamente
             lua_thread.create(function()
                 wait(DELAY_ACAO)
                 sampSendDialogResponse(id, 1, total_linhas - 1, "")
             end)
 
         else
-            -- Fim de todas as páginas
             sampAddChatMessage("{FF4444}╔══════════════════════════════", -1)
             sampAddChatMessage("{FF4444}║ {FFFFFF}Mapeamento concluido!", -1)
             sampAddChatMessage(string.format("{FF4444}║ {FFFFFF}%d empresa(s) encontradas", #empresas), -1)
@@ -176,7 +172,6 @@ sampev.onShowDialog = function(id, tipo, titulo, btn1, btn2, conteudo)
     end
 
     -- ── Dialog de informações da empresa ───────────────────
-    -- Apenas lê e salva — não fecha, não faz mais nada
     if titulo_limpo:find("informa") then
         local dados = parsear_info(conteudo)
         if dados.id and not ids_vistos[dados.id] then
@@ -185,7 +180,6 @@ sampev.onShowDialog = function(id, tipo, titulo, btn1, btn2, conteudo)
             table.insert(empresas, dados)
             log_empresa(dados)
         end
-        -- Usuário decide o que faz com o dialog
         return
     end
 end
@@ -200,8 +194,6 @@ function main()
     garantir_arquivo(ARQUIVO_VISTOS)
 
     carregar_vistos()
-    local total_hist = 0
-    for _ in pairs(ids_vistos) do total_hist = total_hist + 1 end
 
     local f = io.open(ARQUIVO_LOG, "a")
     if f then
@@ -209,25 +201,18 @@ function main()
         f:close()
     end
 
-    sampRegisterChatCommand("mapear", function()
+    sampRegisterChatCommand("empresas", function()
         if not ativo then
             ativo    = true
             empresas = {}
-            sampAddChatMessage("{FF4444}[Mapper] {FFFFFF}Ativado! Abra a lista com {FF4444}Y {FFFFFF}na imobiliaria.", -1)
+            sampAddChatMessage("{FF4444}[Empresas] {FFFFFF}Ativado! Abra a lista com {FF4444}Y {FFFFFF}na imobiliaria.", -1)
         else
             ativo = false
-            sampAddChatMessage("{FF4444}[Mapper] {FFFFFF}Desativado.", -1)
+            sampAddChatMessage("{FF4444}[Empresas] {FFFFFF}Desativado.", -1)
         end
     end)
 
-    sampRegisterChatCommand("maplimpar", function()
-        ids_vistos = {}
-        local fc = io.open(ARQUIVO_VISTOS, "w")
-        if fc then fc:close() end
-        log("Historico limpo!")
-    end)
-
-    sampRegisterChatCommand("mapstatus", function()
+    sampRegisterChatCommand("empresasstatus", function()
         log(string.format("ativo=%s | salvas=%d | historico=%d",
             tostring(ativo), #empresas, (function()
                 local c = 0
@@ -236,7 +221,7 @@ function main()
             end)()))
     end)
 
-    sampAddChatMessage("{FF4444}[Mapper] {FFFFFF}Carregado! {FF4444}/mapear {FFFFFF}para iniciar.", -1)
+    sampAddChatMessage("{FF4444}[Empresas] {FFFFFF}Carregado! {FF4444}/empresas {FFFFFF}para iniciar.", -1)
 
     while true do wait(0) end
 end
