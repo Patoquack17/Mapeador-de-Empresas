@@ -4,7 +4,7 @@
 -- ============================================================
 
 script_name("casa_mapper")
-script_author("mapper")
+script_author("QuackQuack")
 script_version("1.0")
 
 require 'lib.moonloader'
